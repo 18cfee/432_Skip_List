@@ -1,6 +1,7 @@
 public class MainList {
-    private static final int height = 5;
+    private static final int height = 4;
     private static final Node headNodes = null;
+    private static int totalNumberNodes = 0;
     public static void main(String args[]){
 
     }
