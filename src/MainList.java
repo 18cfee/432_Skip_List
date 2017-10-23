@@ -1,5 +1,5 @@
 public class MainList {
-    private static final int height = 4;
+    private static int height = 4;
     private static final Node headNodes = null;
     private static int totalNumberNodes = 0;
     public static void main(String args[]){
@@ -31,12 +31,12 @@ public class MainList {
     }
 
     // array of nodes from highest level to lowest
-    public static Node[] chooseOTGT(int origin){
+    public static Node[] chooseOrigin(int otgt){
         return null;
     }
 
     // Choose the new value based on the absolute positioning
-    public static int chooseNewOriginValue(){
+    public static int chooseNewOTGT(){
         return 0;
     }
 }
