@@ -42,7 +42,10 @@ public class MainList {
             if((onVal < insertVal && insertVal < nextVal) || (onVal > nextVal && (insertVal > onVal || insertVal < nextVal))){
                 if(current.down == null){
                     current.next = node;
+                    node.prev = current;
                     node.next = nextN;
+                    nextN.prev = node;
+
                     for (int i = 2; i <= h; i++) {
                         node.up = new Node(insertVal);
                         node.up.down = node;
@@ -52,6 +55,19 @@ public class MainList {
                             maxHeight = i;
                         }
                         node = node.up;
+
+                        Node ccw = node.next;
+                        Node cw = node.prev;
+                        while(cw.up == null){
+                            cw = cw.prev;
+                        }
+                        while(ccw.next == null){
+                            ccw = node.next;
+                        }
+                        node.prev = cw;
+                        node.next = ccw;
+                        ccw.prev = node;
+                        cw.next = node;
                     }
                     return false;
                 } else{
