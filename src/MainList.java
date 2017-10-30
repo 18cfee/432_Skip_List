@@ -8,18 +8,27 @@ public class MainList {
         // initialize as a circle to itself
         Node originalHEAD = new Node(4);
         HEAD = originalHEAD;
-        Node init = new Node(-4);
-        HEAD.next = init;
-        init.next = HEAD;
 
         printList();
         insert(new Node(7),1);
         insert(new Node(6),1);
-        insert(new Node(5),1);
-        insert(new Node(9),1);
+        insert(new Node(-230),1);
+        insert(new Node(-23423),2);
         insert(new Node(9),1);
         insert(new Node(70),1);
         insert(new Node(34),1);
+        printList();
+        insert(new Node(-2343),2);
+        printList();
+        insert(new Node(94),1);
+        printList();
+        insert(new Node(73),2);
+        printList();
+        insert(new Node(3434),1);
+        insert(new Node(-233),2);
+        insert(new Node(92),1);
+        insert(new Node(702),2);
+        insert(new Node(342),1);
         printList();
 
 
@@ -33,6 +42,17 @@ public class MainList {
         if(insertVal == HEAD.value){
             return true;
         }
+        while(current.next == null){
+            if(current.down != null){
+                current = current.down;
+            } else{
+                current.next = node;
+                current.prev = node;
+                node.next = current;
+                node.prev = current;
+                return false;
+            }
+        }
         while(true){
             int onVal = current.value;
             Node nextN = current.next;
@@ -45,7 +65,7 @@ public class MainList {
                     node.prev = current;
                     node.next = nextN;
                     nextN.prev = node;
-
+                    // Insert extra levels after original insert
                     for (int i = 2; i <= h; i++) {
                         node.up = new Node(insertVal);
                         node.up.down = node;
@@ -53,8 +73,9 @@ public class MainList {
                         if(i > maxHeight){
                             HEAD = node.up;
                             maxHeight = i;
+                            return false;
                         }
-                        node = node.up;
+
 
                         Node ccw = node.next;
                         Node cw = node.prev;
@@ -68,6 +89,8 @@ public class MainList {
                         node.next = ccw;
                         ccw.prev = node;
                         cw.next = node;
+
+                        node = node.up;
                     }
                     return false;
                 } else{
@@ -79,16 +102,21 @@ public class MainList {
 
     // Print out the List
     public static void printList(){
+        System.out.println("Start New Print:");
         Node current = HEAD;
         Node levelStart = HEAD;
-        do{
+        // print all levels
+        while(true){
+
             System.out.print(current.value);
-            while(current.next.value != levelStart.value){
+            while(current.next != null &&  current.next.value != levelStart.value){
                 current = current.next;
                 System.out.print(" ::-> " + current.value);
             }
             System.out.println();
-        }while(current.down != null);
+            if(current.down != null) current = current.down;
+            else break;
+        }
     }
 
     // h will be chosen automatically in this one
