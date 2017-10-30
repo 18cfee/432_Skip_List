@@ -11,16 +11,17 @@ public class MainList {
 
         printList();
         insert(new Node(7),1);
-        insert(new Node(6),1);
+        insert(new Node(6),4);
+        printList();
         insert(new Node(-230),1);
         insert(new Node(-23423),2);
         insert(new Node(9),1);
-        insert(new Node(70),1);
+        insert(new Node(70),3);
         insert(new Node(34),1);
         printList();
         insert(new Node(-2343),2);
         printList();
-        insert(new Node(94),1);
+        insert(new Node(94),3);
         printList();
         insert(new Node(73),2);
         printList();
@@ -42,6 +43,7 @@ public class MainList {
         if(insertVal == HEAD.value){
             return true;
         }
+        // When starting from a HEAD on it's own list
         while(current.next == null){
             if(current.down != null){
                 current = current.down;
@@ -69,28 +71,30 @@ public class MainList {
                     for (int i = 2; i <= h; i++) {
                         node.up = new Node(insertVal);
                         node.up.down = node;
-
+                        // New list
                         if(i > maxHeight){
                             HEAD = node.up;
                             maxHeight = i;
-                            return false;
-                        }
+                            node = node.up;
+                        } else{ // this moves out both directions to find nearest node on next level up to splice into
+                            Node ccw = node.next;
+                            Node cw = node.prev;
+                            while(cw.up == null){
+                                cw = cw.prev;
+                            }
+                            while(ccw.up == null){
+                                ccw = ccw.next;
+                            }
+                            // Move up to do splicing
+                            ccw = ccw.up;
+                            cw = cw.up;
+                            node = node.up;
+                            node.prev = cw;
+                            node.next = ccw;
+                            ccw.prev = node;
+                            cw.next = node;
 
-
-                        Node ccw = node.next;
-                        Node cw = node.prev;
-                        while(cw.up == null){
-                            cw = cw.prev;
                         }
-                        while(ccw.next == null){
-                            ccw = node.next;
-                        }
-                        node.prev = cw;
-                        node.next = ccw;
-                        ccw.prev = node;
-                        cw.next = node;
-
-                        node = node.up;
                     }
                     return false;
                 } else{
@@ -109,12 +113,17 @@ public class MainList {
         while(true){
 
             System.out.print(current.value);
-            while(current.next != null &&  current.next.value != levelStart.value){
+            int levelStartVal = current.value;
+            // print one level
+            while(current.next != null &&  current.next.value != levelStartVal){
                 current = current.next;
                 System.out.print(" ::-> " + current.value);
             }
             System.out.println();
-            if(current.down != null) current = current.down;
+            if(levelStart.down != null) {
+                levelStart = levelStart.down;
+                current = levelStart;
+            }
             else break;
         }
     }
