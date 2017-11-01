@@ -1,4 +1,5 @@
 import java.util.HashSet;
+import java.util.Random;
 
 public class MainList {
     private static Node HEAD = null;
@@ -144,7 +145,17 @@ public class MainList {
 
     // Based on distribution
     public static int pickRandomHeight(){
-        return 1; // Change this
+    		Random r = new Random();
+    		int height = 0;
+    		while(true) {
+	    		int flip = r.nextInt(2);
+	    		if(flip == 0) {
+	    			height++;
+	    		}
+	    		else {
+	    			return height;
+	    		}
+    		}
     }
 
     // array of nodes from highest level to lowest
