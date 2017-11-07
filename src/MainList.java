@@ -1,4 +1,6 @@
 
+//TODO - sorry about the overall organization, if anyone wants me to explain or work on isolating one of the methods that needs to be worked on please let me know
+
 import java.util.HashSet;
 import java.util.Random;
 
@@ -35,9 +37,22 @@ public class MainList {
         insert(new Node(92), 1);
         insert(new Node(702), 2);
         insert(new Node(342), 1);
+        insert(new Node(341));
+        insert(new Node(342));
+        insert(new Node(343));
+        insert(new Node(344));
+        insert(new Node(345));
+        insert(new Node(346));
+        insert(new Node(347));
+        insert(new Node(348));
+        insert(new Node(349));
+        insert(new Node(3410));
+        insert(new Node(3411));
+
         printList();
 
     }
+
 
     // h is hardcoded in this one
     public static boolean insert(Node node, int h) {
@@ -139,6 +154,7 @@ public class MainList {
 
     // h will be chosen automatically in this one
     public static boolean insert(Node node) {
+        Node saveLowNode = node;
         int h = pickRandomHeight();
         int insertVal = node.value;
         Node current = HEAD;
@@ -200,6 +216,7 @@ public class MainList {
                             cw.next = node;
                         }
                     }
+                    updateNxtIndex(saveLowNode);
                     return false;
                 } else {
                     current = current.down;
@@ -210,12 +227,21 @@ public class MainList {
         }
     }
 
+    public static void MasterInsert(){
+        //TODO - maybe split up the insert method into parts for clarity
+        // TODO - make insert based off of a set origin - we can add choosing the origin later
+        int otgt = chooseNewOTGT();
+        chooseOrigin(otgt);
+    }
+
     //
     public static boolean deleteNode(int value) {
+        //TODO
         return false;
     }
 
     public static boolean searchNode(int value) {
+        //TODO
         return false;
     }
 
@@ -235,11 +261,19 @@ public class MainList {
 
     // array of nodes from highest level to lowest
     public static Node[] chooseOrigin(int otgt) {
+        //TODO
         return null;
     }
 
     // Choose the new value based on the absolute positioning
     public static int chooseNewOTGT() {
+        //TODO
         return 0;
+    }
+
+    //Update the the nodes skip values when a node is inserted into the List
+    // the inserted node should be the lowest inserted on the list so that it is easy to go back up and add - this node tested on 11/6
+    public static void updateNxtIndex(Node start){
+        //TODO - understading the insert() method probably would help for this because it will invole some of the same concepts
     }
 }
