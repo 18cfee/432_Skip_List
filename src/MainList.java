@@ -1,19 +1,19 @@
 
 //TODO - sorry about the overall organization, if anyone wants me to explain or work on isolating one of the methods that needs to be worked on please let me know
-
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 
 public class MainList {
 
-    private static Node HEAD = null;
+    private static ArrayList<Node> HEAD = new ArrayList<Node>();
     private static int totalNumberNodes = 0;
     public static int maxHeight = 1;
 
     public static void main(String args[]) {
         // initialize as a circle to itself
         Node originalHEAD = new Node(4);
-        HEAD = originalHEAD;
+        HEAD.add(0, originalHEAD);
 
         printList();
         insert(new Node(7), 1);
@@ -26,6 +26,13 @@ public class MainList {
         insert(new Node(70), 3);
         insert(new Node(34), 1);
         printList();
+        for (int i = 0; i < 1; i++) {
+            int num = chooseNewOTGT();
+            System.out.println("OGTG: " + num);
+            for (Node n : chooseOrigin(num)) {
+                System.out.println("nValue: " + n.value);
+            }
+        }
         insert(new Node(-2343), 2);
         printList();
         insert(new Node(94), 3);
@@ -53,13 +60,12 @@ public class MainList {
 
     }
 
-
     // h is hardcoded in this one
     public static boolean insert(Node node, int h) {
         int insertVal = node.value;
-        Node current = HEAD;
+        Node current = HEAD.get(HEAD.size() - 1);
         // bounds checking, since next is checked from here on
-        if (insertVal == HEAD.value) {
+        if (insertVal == current.value) {
             return true;
         }
         // When starting from a HEAD on it's own list
@@ -93,9 +99,11 @@ public class MainList {
                     for (int i = 2; i <= h; i++) {
                         node.up = new Node(insertVal);
                         node.up.down = node;
+                        if (HEAD.size() < i) {
+                            HEAD.add(i - 1, node.up);
+                        }
                         // New list
                         if (i > maxHeight) {
-                            HEAD = node.up;
                             maxHeight = i;
                             node = node.up;
                         } else { // this moves out both directions to find nearest node on next level up to splice into
@@ -131,36 +139,26 @@ public class MainList {
     // Print out the List
     public static void printList() {
         System.out.println("Start New Print:");
-        Node current = HEAD;
-        Node levelStart = HEAD;
         // print all levels
-        while (true) {
-
+        for (int i = 0; i < HEAD.size(); i++) {
+            Node current = HEAD.get(i);
             System.out.print(current.value);
             int levelStartVal = current.value;
-            // print one level
             while (current.next != null && current.next.value != levelStartVal) {
                 current = current.next;
                 System.out.print(" ::-> " + current.value);
             }
             System.out.println();
-            if (levelStart.down != null) {
-                levelStart = levelStart.down;
-                current = levelStart;
-            } else {
-                break;
-            }
         }
     }
 
     // h will be chosen automatically in this one
     public static boolean insert(Node node) {
-        Node saveLowNode = node;
         int h = pickRandomHeight();
         int insertVal = node.value;
-        Node current = HEAD;
+        Node current = HEAD.get(HEAD.size() - 1);
         // bounds checking, since next is checked from here on
-        if (insertVal == HEAD.value) {
+        if (insertVal == current.value) {
             return true;
         }
         // When starting from a HEAD on it's own list
@@ -172,10 +170,12 @@ public class MainList {
                 current.prev = node;
                 node.next = current;
                 node.prev = current;
+                totalNumberNodes++;
                 return false;
             }
         }
         while (true) {
+            Node saveLowNode = node;
             int onVal = current.value;
             Node nextN = current.next;
             int nextVal = nextN.value;
@@ -193,9 +193,11 @@ public class MainList {
                     for (int i = 2; i <= h; i++) {
                         node.up = new Node(insertVal);
                         node.up.down = node;
+                        if (HEAD.size() < i) {
+                            HEAD.add(i - 1, node.up);
+                        }
                         // New list
                         if (i > maxHeight) {
-                            HEAD = node.up;
                             maxHeight = i;
                             node = node.up;
                         } else { // this moves out both directions to find nearest node on next level up to splice into
@@ -218,6 +220,7 @@ public class MainList {
                         }
                     }
                     updateNxtIndex(saveLowNode);
+                    totalNumberNodes++;
                     return false;
                 } else {
                     current = current.down;
@@ -228,7 +231,7 @@ public class MainList {
         }
     }
 
-    public static void MasterInsert(){
+    public static void MasterInsert() {
         //TODO - maybe split up the insert method into parts for clarity
         // TODO - make insert based off of a set origin - we can add choosing the origin later
         int otgt = chooseNewOTGT();
@@ -263,7 +266,7 @@ public class MainList {
     // array of nodes from highest level to lowest (ond[] array)
     public static Node[] chooseOrigin(int otgt) {
         Node[] ond = new Node[maxHeight];
-        Node current = HEAD[1];
+        Node current = HEAD.get(0);
         for (int i = 1; i <= maxHeight; i++) {
             Node fullCircle = current.prev;
             Node largest = current;
@@ -284,7 +287,7 @@ public class MainList {
             if (current.down != null) {
                 current = current.down;
             } else {
-                current = HEAD[i];
+                current = HEAD.get(i - 1);
             }
         }
         return ond;
@@ -294,12 +297,21 @@ public class MainList {
     public static int chooseNewOTGT() {
         Random rand = new Random();
         int otgt = rand.nextInt((totalNumberNodes) + 1);    //absolute position
-        return otgt;
+        System.out.println("OTGT: " + otgt);
+        Node current = HEAD.get(0);
+        while (current.index != otgt) {      //Move untill we find a value in the list smaller than otgt
+            if (current.index < otgt) {
+                current = current.next;
+            } else if (current.index > otgt) {
+                current = current.prev;
+            }
+        }
+        return current.value;
     }
 
     //Update the the nodes skip values when a node is inserted into the List
     // the inserted node should be the lowest inserted on the list so that it is easy to go back up and add - this node tested on 11/6
-    public static void updateNxtIndex(Node start){
+    public static void updateNxtIndex(Node start) {
         //TODO - understading the insert() method probably would help for this because it will invole some of the same concepts
     }
 }
