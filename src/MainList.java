@@ -71,6 +71,7 @@ public class MainList {
                 current.prev = node;
                 node.next = current;
                 node.prev = current;
+                totalNumberNodes++;
                 return false;
             }
         }
@@ -114,9 +115,9 @@ public class MainList {
                             node.next = ccw;
                             ccw.prev = node;
                             cw.next = node;
-
                         }
                     }
+                    totalNumberNodes++;
                     return false;
                 } else {
                     current = current.down;
@@ -259,16 +260,41 @@ public class MainList {
         }
     }
 
-    // array of nodes from highest level to lowest
+    // array of nodes from highest level to lowest (ond[] array)
     public static Node[] chooseOrigin(int otgt) {
-        //TODO
-        return null;
+        Node[] ond = new Node[maxHeight];
+        Node current = HEAD[1];
+        for (int i = 1; i <= maxHeight; i++) {
+            Node fullCircle = current.prev;
+            Node largest = current;
+            while (current.value >= otgt) {      //Move untill we find a value in the list smaller than otgt
+                if (current.value > largest.value) {
+                    largest = current;
+                }
+                if (current == fullCircle) {     //If we have gone full circle an no value was less than otgt.
+                    current = largest;
+                    break;
+                }
+                current = current.next;
+            }
+            while (current.value + current.skip < otgt) {      //Move untill current.next is bigger than otgt.
+                current = current.next;
+            }
+            ond[i - 1] = current;
+            if (current.down != null) {
+                current = current.down;
+            } else {
+                current = HEAD[i];
+            }
+        }
+        return ond;
     }
 
     // Choose the new value based on the absolute positioning
     public static int chooseNewOTGT() {
-        //TODO
-        return 0;
+        Random rand = new Random();
+        int otgt = rand.nextInt((totalNumberNodes) + 1);    //absolute position
+        return otgt;
     }
 
     //Update the the nodes skip values when a node is inserted into the List
