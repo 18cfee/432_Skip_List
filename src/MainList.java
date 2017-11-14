@@ -150,6 +150,8 @@ public class MainList {
             }
             System.out.println();
         }
+        System.out.println();
+
     }
 
     // h will be chosen automatically in this one
