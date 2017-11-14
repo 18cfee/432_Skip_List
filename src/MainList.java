@@ -137,6 +137,8 @@ public class MainList {
     }
 
     // Print out the List
+
+    //Todo Erik or Robbie edit this
     public static void printList() {
         System.out.println("Start New Print:");
         // print all levels
@@ -245,7 +247,7 @@ public class MainList {
     }
 
     public static boolean searchNode(int value) {
-        //TODO
+        //TODO Erik or Robbie
         return false;
     }
 
