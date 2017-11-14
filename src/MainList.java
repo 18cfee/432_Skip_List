@@ -26,6 +26,7 @@ public class MainList {
         insert(new Node(70), 3);
         insert(new Node(34), 1);
         printList();
+        MasterInsert();
         for (int i = 0; i < 1; i++) {
             int num = chooseNewOTGT();
             System.out.println("OGTG: " + num);
@@ -234,6 +235,7 @@ public class MainList {
     public static void MasterInsert() {
         //TODO - maybe split up the insert method into parts for clarity
         // TODO - make insert based off of a set origin - we can add choosing the origin later
+        System.out.println("Starting master insert");
         int otgt = chooseNewOTGT();
         chooseOrigin(otgt);
     }
@@ -270,7 +272,7 @@ public class MainList {
         for (int i = 1; i <= maxHeight; i++) {
             Node fullCircle = current.prev;
             Node largest = current;
-            while (current.value >= otgt) {      //Move untill we find a value in the list smaller than otgt
+            while (current.value >= otgt) {      //Move until we find a value in the list smaller than otgt
                 if (current.value > largest.value) {
                     largest = current;
                 }
@@ -280,7 +282,7 @@ public class MainList {
                 }
                 current = current.next;
             }
-            while (current.value + current.skip < otgt) {      //Move untill current.next is bigger than otgt.
+            while (current.value + current.skip < otgt) {      //Move until current.next is bigger than otgt.
                 current = current.next;
             }
             ond[i - 1] = current;
@@ -289,6 +291,7 @@ public class MainList {
             } else {
                 current = HEAD.get(i - 1);
             }
+            System.out.println("ond; " + ond[i - 1].value);
         }
         return ond;
     }
