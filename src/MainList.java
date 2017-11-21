@@ -13,10 +13,11 @@ public class MainList {
     public static void main(String args[]) {
         // initialize as a circle to itself
         Node originalHEAD = new Node(4);
+        originalHEAD.index = 1;
         HEAD.add(0, originalHEAD);
 
-        printList();
-        insert(new Node(7), 1);
+        printListWithIndex();
+        /*insert(new Node(7), 1);
         insert(new Node(6), 4);
         insert(new Node(43110));
         printList();
@@ -24,16 +25,16 @@ public class MainList {
         insert(new Node(-23423), 2);
         insert(new Node(9), 1);
         insert(new Node(70), 3);
-        insert(new Node(34), 1);
-        printList();
-        for (int i = 0; i < 1; i++) {
+        insert(new Node(34), 1);*/
+        printListWithIndex();
+        /*for (int i = 0; i < 1; i++) {
             int num = chooseNewOTGT();
             System.out.println("OGTG: " + num);
             for (Node n : chooseOrigin(num)) {
                 System.out.println("nValue: " + n.value);
             }
-        }
-        insert(new Node(-2343), 2);
+        }*/
+        /*(insert(new Node(-2343), 2);
         printList();
         insert(new Node(94), 3);
         printList();
@@ -43,7 +44,7 @@ public class MainList {
         insert(new Node(-233), 2);
         insert(new Node(92), 1);
         insert(new Node(702), 2);
-        insert(new Node(342), 1);
+        insert(new Node(342), 1);*/
         insert(new Node(341));
         insert(new Node(342));
         insert(new Node(343));
@@ -55,13 +56,13 @@ public class MainList {
         insert(new Node(349));
         insert(new Node(3410));
         insert(new Node(3411));
-
+        printListWithIndex();
         printList();
 
     }
 
     // h is hardcoded in this one
-    public static boolean insert(Node node, int h) {
+    /*public static boolean insert(Node node, int h) {
         int insertVal = node.value;
         Node current = HEAD.get(HEAD.size() - 1);
         // bounds checking, since next is checked from here on
@@ -134,7 +135,7 @@ public class MainList {
                 current = nextN;
             }
         }
-    }
+    }*/
 
     // Print out the List
 
@@ -154,6 +155,21 @@ public class MainList {
         }
     }
 
+    public static void printListWithIndex() {
+        System.out.println("Start New Print:");
+        // print all levels
+        for (int i = 0; i < HEAD.size(); i++) {
+            Node current = HEAD.get(i);
+            System.out.print(current.value + ":" + current.index);
+            int levelStartVal = current.value;
+            while (current.next != null && current.next.value != levelStartVal) {
+                current = current.next;
+                System.out.print(" ::-> " + current.value + ":" + current.index);
+            }
+            System.out.println();
+        }
+    }
+
     // h will be chosen automatically in this one
     public static boolean insert(Node node) {
         int h = pickRandomHeight();
@@ -168,10 +184,12 @@ public class MainList {
             if (current.down != null) {
                 current = current.down;
             } else {
+                // First node inserted??
                 current.next = node;
                 current.prev = node;
                 node.next = current;
                 node.prev = current;
+                node.index = 1;
                 totalNumberNodes++;
                 return false;
             }
@@ -182,6 +200,7 @@ public class MainList {
             Node nextN = current.next;
             int nextVal = nextN.value;
             if (nextVal == insertVal) {
+                // already found the value we are trying to insert
                 return true;
             }
             // right interval (include circular logic)
@@ -190,8 +209,12 @@ public class MainList {
                     current.next = node;
                     node.prev = current;
                     node.next = nextN;
+                    node.index = 1; // Lowest level skips one
                     nextN.prev = node;
                     // Insert extra levels after original insert
+                    // These vars are used to update index value
+                    int nodesBefore = 1;
+                    int nodesAfter = 1;
                     for (int i = 2; i <= h; i++) {
                         node.up = new Node(insertVal);
                         node.up.down = node;
@@ -207,9 +230,11 @@ public class MainList {
                             Node cw = node.prev;
                             while (cw.up == null) {
                                 cw = cw.prev;
+                                nodesBefore++;
                             }
                             while (ccw.up == null) {
                                 ccw = ccw.next;
+                                nodesAfter++;
                             }
                             // Move up to do splicing
                             ccw = ccw.up;
@@ -219,6 +244,8 @@ public class MainList {
                             node.next = ccw;
                             ccw.prev = node;
                             cw.next = node;
+                            cw.index = nodesBefore;
+                            node.index = nodesAfter;
                         }
                     }
                     updateNxtIndex(saveLowNode);

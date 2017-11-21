@@ -4,6 +4,7 @@ public class Node {
     public Node prev = null;
     public Node up = null;
     public Node down = null;
+    // not using skip as of now
     public int skip = 1;
     public int index = -1;
     public Node(int value){
