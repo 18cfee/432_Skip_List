@@ -225,6 +225,7 @@ public class MainList {
                         if (i > maxHeight) {
                             maxHeight = i;
                             node = node.up;
+                            node.index = 1;
                         } else { // this moves out both directions to find nearest node on next level up to splice into
                             Node ccw = node.next;
                             Node cw = node.prev;
@@ -248,7 +249,7 @@ public class MainList {
                             node.index = nodesAfter;
                         }
                     }
-                    updateNxtIndex(saveLowNode);
+                    updateNxtIndex(h,node);
                     totalNumberNodes++;
                     return false;
                 } else {
@@ -340,7 +341,10 @@ public class MainList {
 
     //Update the the nodes skip values when a node is inserted into the List
     // the inserted node should be the lowest inserted on the list so that it is easy to go back up and add - this node tested on 11/6
-    public static void updateNxtIndex(Node start) {
+    public static void updateNxtIndex(int h, Node start) {
         //TODO - understading the insert() method probably would help for this because it will invole some of the same concepts
+        for (int i = h; i < maxHeight; i++) {
+            // need to update all the updates on these possible levels
+        }
     }
 }
