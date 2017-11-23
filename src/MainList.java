@@ -7,7 +7,7 @@ import java.util.Random;
 public class MainList {
 
     private static ArrayList<Node> HEAD = new ArrayList<Node>();
-    private static int totalNumberNodes = 0;
+    private static int totalNumberNodes = 1;
     public static int maxHeight = 1;
 
     public static void main(String args[]) {
@@ -172,6 +172,7 @@ public class MainList {
 
     // h will be chosen automatically in this one
     public static boolean insert(Node node) {
+        int oldHeight = maxHeight;
         int h = pickRandomHeight();
         int insertVal = node.value;
         Node current = HEAD.get(HEAD.size() - 1);
@@ -225,17 +226,17 @@ public class MainList {
                         if (i > maxHeight) {
                             maxHeight = i;
                             node = node.up;
-                            node.index = 1;
+                            node.index = totalNumberNodes;
                         } else { // this moves out both directions to find nearest node on next level up to splice into
                             Node ccw = node.next;
                             Node cw = node.prev;
                             while (cw.up == null) {
                                 cw = cw.prev;
-                                nodesBefore++;
+                                //nodesBefore++;
                             }
                             while (ccw.up == null) {
                                 ccw = ccw.next;
-                                nodesAfter++;
+                                //nodesAfter++;
                             }
                             // Move up to do splicing
                             ccw = ccw.up;
@@ -245,11 +246,11 @@ public class MainList {
                             node.next = ccw;
                             ccw.prev = node;
                             cw.next = node;
-                            cw.index = nodesBefore;
-                            node.index = nodesAfter;
+                            //cw.index = nodesBefore;
+                            //node.index = nodesAfter;
                         }
                     }
-                    updateNxtIndex(h,node);
+                    updateNxtIndex(saveLowNode, oldHeight);
                     totalNumberNodes++;
                     return false;
                 } else {
@@ -341,10 +342,34 @@ public class MainList {
 
     //Update the the nodes skip values when a node is inserted into the List
     // the inserted node should be the lowest inserted on the list so that it is easy to go back up and add - this node tested on 11/6
-    public static void updateNxtIndex(int h, Node start) {
+    public static void updateNxtIndex(Node start, int updateHieght) {
         //TODO - understading the insert() method probably would help for this because it will invole some of the same concepts
-        for (int i = h; i < maxHeight; i++) {
-            // need to update all the updates on these possible levels
+        Node current = start;
+        Node cw = current.prev;
+        int before = cw.index; //1
+        Node ccw = current.next;
+        int after = 1;
+        int h = Math.min(maxHeight, updateHieght + 1);
+        for (int i = 1; i < h; i++) {
+            while(cw.up == null){
+                cw = cw.prev;
+                before+=cw.index;
+            }
+            while(ccw.up == null){
+                ccw = ccw.next;
+                after++;
+            }
+            cw = cw.up;
+            ccw = ccw.up;
+            if(current.up != null){
+                after = cw.index - before;
+                cw.index = before;
+                current = current.up;
+                current.index = after;
+            } else{
+                cw.index++;
+            }
+
         }
     }
 }
