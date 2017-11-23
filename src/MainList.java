@@ -172,6 +172,7 @@ public class MainList {
 
     // h will be chosen automatically in this one
     public static boolean insert(Node node) {
+        totalNumberNodes++;
         int oldHeight = maxHeight;
         int h = pickRandomHeight();
         int insertVal = node.value;
@@ -191,7 +192,6 @@ public class MainList {
                 node.next = current;
                 node.prev = current;
                 node.index = 1;
-                totalNumberNodes++;
                 return false;
             }
         }
@@ -219,9 +219,9 @@ public class MainList {
                     for (int i = 2; i <= h; i++) {
                         node.up = new Node(insertVal);
                         node.up.down = node;
-                        if (HEAD.size() < i) {
+                        /*if (HEAD.size() < i) {
                             HEAD.add(i - 1, node.up);
-                        }
+                        }*/
                         // New list
                         if (i > maxHeight) {
                             maxHeight = i;
@@ -251,7 +251,6 @@ public class MainList {
                         }
                     }
                     updateNxtIndex(saveLowNode, oldHeight);
-                    totalNumberNodes++;
                     return false;
                 } else {
                     current = current.down;
@@ -365,7 +364,7 @@ public class MainList {
                 after = cw.index - before;
                 cw.index = before;
                 current = current.up;
-                current.index = after;
+                current.index = after + 1;
             } else{
                 cw.index++;
             }
