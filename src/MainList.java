@@ -6,7 +6,8 @@ import java.util.Random;
 
 public class MainList {
 
-    private static ArrayList<Node> HEAD = new ArrayList<Node>();
+    //private static ArrayList<Node> HEAD = new ArrayList<Node>();
+    private static Node HEAD;
     private static int totalNumberNodes = 1;
     public static int maxHeight = 1;
 
@@ -14,7 +15,7 @@ public class MainList {
         // initialize as a circle to itself
         Node originalHEAD = new Node(4);
         originalHEAD.index = 1;
-        HEAD.add(0, originalHEAD);
+        HEAD = originalHEAD;
 
         printListWithIndex();
         /*insert(new Node(7), 1);
@@ -140,7 +141,7 @@ public class MainList {
     // Print out the List
 
     //Todo Erik or Robbie edit this
-    public static void printList() {
+    /*public static void printList() {
         System.out.println("Start New Print:");
         // print all levels
         for (int i = 0; i < HEAD.size(); i++) {
@@ -153,9 +154,9 @@ public class MainList {
             }
             System.out.println();
         }
-    }
+    }*/
 
-    public static void printListWithIndex() {
+    /*public static void printListWithIndex() {
         System.out.println("Start New Print:");
         // print all levels
         for (int i = 0; i < HEAD.size(); i++) {
@@ -168,7 +169,7 @@ public class MainList {
             }
             System.out.println();
         }
-    }
+    }*/
 
     // h will be chosen automatically in this one
     public static boolean insert(Node node) {
@@ -176,7 +177,7 @@ public class MainList {
         int oldHeight = maxHeight;
         int h = pickRandomHeight();
         int insertVal = node.value;
-        Node current = HEAD.get(HEAD.size() - 1);
+        Node current = HEAD;
         // bounds checking, since next is checked from here on
         if (insertVal == current.value) {
             return true;
@@ -227,6 +228,7 @@ public class MainList {
                             maxHeight = i;
                             node = node.up;
                             node.index = totalNumberNodes;
+                            HEAD = node;
                         } else { // this moves out both directions to find nearest node on next level up to splice into
                             Node ccw = node.next;
                             Node cw = node.prev;
@@ -261,12 +263,12 @@ public class MainList {
         }
     }
 
-    public static void MasterInsert() {
+    /*public static void MasterInsert() {
         //TODO - maybe split up the insert method into parts for clarity
         // TODO - make insert based off of a set origin - we can add choosing the origin later
         int otgt = chooseNewOTGT();
         chooseOrigin(otgt);
-    }
+    }*/
 
     //
     public static boolean deleteNode(int value) {
@@ -294,7 +296,7 @@ public class MainList {
     }
 
     // array of nodes from highest level to lowest (ond[] array)
-    public static Node[] chooseOrigin(int otgt) {
+    /*public static Node[] chooseOrigin(int otgt) {
         Node[] ond = new Node[maxHeight];
         Node current = HEAD.get(0);
         for (int i = 1; i <= maxHeight; i++) {
@@ -321,10 +323,10 @@ public class MainList {
             }
         }
         return ond;
-    }
+    }*/
 
     // Choose the new value based on the absolute positioning
-    public static int chooseNewOTGT() {
+    /*public static int chooseNewOTGT() {
         Random rand = new Random();
         int otgt = rand.nextInt((totalNumberNodes) + 1);    //absolute position
         System.out.println("OTGT: " + otgt);
@@ -337,6 +339,54 @@ public class MainList {
             }
         }
         return current.value;
+    }*/
+
+    // Print out the List
+    public static void printList(){
+        System.out.println("Start New Print:");
+        Node current = HEAD;
+        Node levelStart = HEAD;
+        // print all levels
+        while(true){
+
+            System.out.print(current.value);
+            int levelStartVal = current.value;
+            // print one level
+            while(current.next != null &&  current.next.value != levelStartVal){
+                current = current.next;
+                System.out.print(" ::-> " + current.value);
+            }
+            System.out.println();
+            if(levelStart.down != null) {
+                levelStart = levelStart.down;
+                current = levelStart;
+            }
+            else break;
+        }
+    }
+
+    // Print out the List
+    public static void printListWithIndex(){
+        System.out.println("Start New Print:");
+        Node current = HEAD;
+        Node levelStart = HEAD;
+        // print all levels
+        while(true){
+
+            System.out.print(current.value + ":" + current.index);
+            int levelStartVal = current.value;
+            // print one level
+            while(current.next != null &&  current.next.value != levelStartVal){
+                current = current.next;
+                System.out.print(" ::-> " + current.value+ ":" + current.index);
+            }
+            System.out.println();
+            if(levelStart.down != null) {
+                levelStart = levelStart.down;
+                current = levelStart;
+            }
+            else break;
+        }
     }
 
     //Update the the nodes skip values when a node is inserted into the List
