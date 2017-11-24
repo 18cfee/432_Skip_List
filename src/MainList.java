@@ -173,7 +173,6 @@ public class MainList {
 
     // h will be chosen automatically in this one
     public static boolean insert(Node node) {
-        totalNumberNodes++;
         int oldHeight = maxHeight;
         int h = pickRandomHeight();
         int insertVal = node.value;
@@ -193,6 +192,7 @@ public class MainList {
                 node.next = current;
                 node.prev = current;
                 node.index = 1;
+                totalNumberNodes++;
                 return false;
             }
         }
@@ -253,6 +253,7 @@ public class MainList {
                         }
                     }
                     updateNxtIndex(saveLowNode, oldHeight);
+                    totalNumberNodes++;
                     return false;
                 } else {
                     current = current.down;
@@ -326,20 +327,22 @@ public class MainList {
     }*/
 
     // Choose the new value based on the absolute positioning
-    /*public static int chooseNewOTGT() {
+    public static int chooseNewOTGT() {
         Random rand = new Random();
-        int otgt = rand.nextInt((totalNumberNodes) + 1);    //absolute position
+        int otgt = rand.nextInt((totalNumberNodes));    //absolute position
         System.out.println("OTGT: " + otgt);
-        Node current = HEAD.get(0);
-        while (current.index != otgt) {      //Move untill we find a value in the list smaller than otgt
-            if (current.index < otgt) {
+        Node current = HEAD;
+        int indexFromHead = 0;
+        while (indexFromHead != otgt) {      //Move untill we find a value in the list smaller than otgt
+            if (indexFromHead + current.index < otgt) {
                 current = current.next;
-            } else if (current.index > otgt) {
-                current = current.prev;
+                indexFromHead+=current.index;
+            } else {
+                current = current.down;
             }
         }
         return current.value;
-    }*/
+    }
 
     // Print out the List
     public static void printList(){
@@ -398,8 +401,8 @@ public class MainList {
         int before = cw.index; //1
         Node ccw = current.next;
         int after = 1;
-        int h = Math.min(maxHeight, updateHieght + 1);
-        for (int i = 1; i < h; i++) {
+        //int h = Math.min(maxHeight, updateHieght + 1);
+        for (int i = 1; i < maxHeight; i++) {
             while(cw.up == null){
                 cw = cw.prev;
                 before+=cw.index;
@@ -410,7 +413,7 @@ public class MainList {
             }
             cw = cw.up;
             ccw = ccw.up;
-            if(current.up != null){
+            if(current.up != null && current.value != cw.value){
                 after = cw.index - before;
                 cw.index = before;
                 current = current.up;
