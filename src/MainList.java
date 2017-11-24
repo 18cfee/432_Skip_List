@@ -297,9 +297,9 @@ public class MainList {
     }
 
     // array of nodes from highest level to lowest (ond[] array)
-    /*public static Node[] chooseOrigin(int otgt) {
+    public static Node[] chooseOrigin(int otgt) {
         Node[] ond = new Node[maxHeight];
-        Node current = HEAD.get(0);
+        // todo fix Node current = HEAD.get(0);
         for (int i = 1; i <= maxHeight; i++) {
             Node fullCircle = current.prev;
             Node largest = current;
@@ -320,11 +320,11 @@ public class MainList {
             if (current.down != null) {
                 current = current.down;
             } else {
-                current = HEAD.get(i - 1);
+                //TODO fix current = HEAD.get(i - 1);
             }
         }
         return ond;
-    }*/
+    }
 
     // Choose the new value based on the absolute positioning
     public static int chooseNewOTGT() {
@@ -332,11 +332,12 @@ public class MainList {
         int otgt = rand.nextInt((totalNumberNodes));    //absolute position
         System.out.println("OTGT: " + otgt);
         Node current = HEAD;
+        //This far depects how many absolute pos have been traversed
         int indexFromHead = 0;
-        while (indexFromHead != otgt) {      //Move untill we find a value in the list smaller than otgt
-            if (indexFromHead + current.index < otgt) {
+        while (indexFromHead != otgt) {      //Move untill we find otgt
+            if (indexFromHead + current.index < otgt) { // Does not overshoot
+                indexFromHead+=current.index; // add number of nodes skipped by moving to next
                 current = current.next;
-                indexFromHead+=current.index;
             } else {
                 current = current.down;
             }
@@ -399,22 +400,15 @@ public class MainList {
         Node current = start;
         Node cw = current.prev;
         int before = cw.index; //1
-        Node ccw = current.next;
-        int after = 1;
         //int h = Math.min(maxHeight, updateHieght + 1);
         for (int i = 1; i < maxHeight; i++) {
             while(cw.up == null){
                 cw = cw.prev;
                 before+=cw.index;
             }
-            while(ccw.up == null){
-                ccw = ccw.next;
-                after++;
-            }
             cw = cw.up;
-            ccw = ccw.up;
             if(current.up != null && current.value != cw.value){
-                after = cw.index - before;
+                int after = cw.index - before;
                 cw.index = before;
                 current = current.up;
                 current.index = after + 1;
