@@ -278,7 +278,28 @@ public class MainList {
     }
 
     public static boolean searchNode(int value) {
-        //TODO Erik or Robbie
+        //TODO Erik
+        Node cur = HEAD.get(otgt);
+        
+        while(cur.value != value && !cur.visited){
+            cur.visited = true;
+            if(cur.value < value)
+                if(cur.next.value > value)
+                    cur = cur.down;
+                }
+                    cur = cur.next;
+            }
+    
+            if(cur.value > value){
+                if(cur.prev.value < value){
+                    cur = cur.down;
+                }
+                cur = cur.next;
+            }
+    
+            if(cur.value == value{
+                return true;
+            }
         return false;
     }
 
