@@ -283,7 +283,7 @@ public class MainList {
         
         while(cur.value != value && !cur.visited){
             cur.visited = true;
-            if(cur.value < value)
+            if(cur.value < value) {
                 if(cur.next.value > value)
                     cur = cur.down;
                 }
