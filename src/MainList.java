@@ -39,7 +39,7 @@ public class MainList {
             System.out.println("Enter the number you want to search for or -1 to exit: ");
             input = in.nextInt();
             if(input != -1){
-                searchNode(input,ond);
+                System.out.println("Found: "+ searchNode(input,ond));
             }
         } while(input != -1);
 
@@ -151,30 +151,44 @@ public class MainList {
         return false;
     }
 
-    public static boolean searchNode(int value, Node[] ond) {
+    public static boolean searchNode(int insertVal, Node[] ond) {
         //TODO Erik
-        Node cur = HEAD;
-        
-        while(cur.value != value && !cur.visited){
-            cur.visited = true;
-            if(cur.value < value) {
-                if(cur.next.value > value)
-                    cur = cur.down;
-                }
-                    cur = cur.next;
+        int indexOnd = 0;
+        Node cur = ond[indexOnd];
+        cur.visited = true;
+        // get through the lists with only one node
+        while(cur.next == null){
+            if(cur.value == insertVal){
+                // found
+                return true;
+            } else{
+                //continue
+                indexOnd++;
+                cur = ond[indexOnd];
+                cur.visited = true;
             }
-    
-            if(cur.value > value){
-                if(cur.prev.value < value){
+        }
+        if(cur.value == insertVal){
+            cur.visited = true;
+            return true;
+        }
+        while(true) {
+
+            int onVal = cur.value;
+            int nextVal = cur.next.value;
+            cur.visited = true;
+            if(nextVal == insertVal) return true;
+            //if the value is in the right slot
+            if (((onVal < insertVal && insertVal < nextVal) || (onVal > nextVal && (insertVal > onVal || insertVal < nextVal)))) {
+                if(cur.down != null){
                     cur = cur.down;
+                } else{
+                    return false;
                 }
+            } else {
                 cur = cur.next;
             }
-    
-            if(cur.value == value){
-                return true;
-            }
-        return false;
+        }
     }
 
     // Based on distribution
