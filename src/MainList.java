@@ -10,7 +10,7 @@ public class MainList {
     private static Node HEAD;
     private static int totalNumberNodes = 1;
     public static int maxHeight = 1;
-
+asda
     public static void main(String args[]) {
         // initialize as a circle to itself
         Node originalHEAD = new Node(4);
