@@ -27,7 +27,7 @@ public class MainList {
         insert(new Node(349));
         insert(new Node(369));
         insert(new Node(380));
-        printListWithIndex();
+        //printListWithIndex();
         printList();
         Scanner in = new Scanner(System.in);
         int input = 0;
@@ -41,6 +41,7 @@ public class MainList {
             if(input != -1){
                 System.out.println("Found: "+ searchNode(input,ond));
             }
+            printList();
         } while(input != -1);
 
     }
@@ -177,11 +178,27 @@ public class MainList {
             int onVal = cur.value;
             int nextVal = cur.next.value;
             cur.visited = true;
-            if(nextVal == insertVal) return true;
+            if(nextVal == insertVal) {
+                cur.next.visited = true;
+                return true;
+            }
             //if the value is in the right slot
-            if (((onVal < insertVal && insertVal < nextVal) || (onVal > nextVal && (insertVal > onVal || insertVal < nextVal)))) {
+            if (rightIntervol(onVal, insertVal, nextVal)) {
                 if(cur.down != null){
-                    cur = cur.down;
+                    // Only evealuate OND if ond is in the current intervol
+                    if(rightIntervol(onVal, ond[indexOnd].value, nextVal)) {
+                        //Choose between next ond and going down
+                        //between current and next ond
+                        if (rightIntervol(onVal, insertVal, ond[indexOnd + 1].value)) {
+                            cur = cur.down;
+                        } else {
+                            cur = ond[indexOnd + 1];
+                        }
+                    }
+                    else{
+                        cur = cur.down;
+                    }
+                    indexOnd++;
                 } else{
                     return false;
                 }
@@ -189,6 +206,12 @@ public class MainList {
                 cur = cur.next;
             }
         }
+    }
+
+    // Right slot
+    public static boolean rightIntervol(int onVal, int insertVal, int nextVal){
+        return ((onVal <= insertVal && insertVal <= nextVal) ||
+                (onVal >= nextVal && (insertVal >= onVal || insertVal <= nextVal)));
     }
 
     // Based on distribution
@@ -224,7 +247,7 @@ public class MainList {
                     }
                     current = current.next;
                 }
-                while (current.value + current.skip < otgt) {      //Move untill current.next is bigger than otgt.
+                while (current.next.value < otgt) {      //Move untill current.next is bigger than otgt.
                     current = current.next;
                 }
             }
@@ -242,6 +265,7 @@ public class MainList {
     public static void print(Node[] ond){
         System.out.print("Ond: ");
         for (int i = 0; i < ond.length; i++) {
+            ond[i].ond = true;
             System.out.print(ond[i].value + ", ");
         }
         System.out.println();
@@ -276,24 +300,44 @@ public class MainList {
         // print all levels
         while(true){
             toBeSkipped =   current.index;
+            if(current.ond){
+                System.out.print("O");
+            }else{
+                System.out.print(" ");
+            }
             System.out.print(current.value);
+            if(current.visited == true){
+                System.out.print("V");
+            }else{
+                System.out.print(" ");
+            }
+            current.visited = false;
+            current.ond = false;
             int levelStartVal = current.value;
             // print one level
             while(current.next != null &&  current.next.value != levelStartVal){
                 while(toBeSkipped  > 1)
                 {
-                    System.out.print("          ");
+                    System.out.print("           ");
                     toBeSkipped--;
                 }
                 current = current.next;
+                System.out.print(" ::-> ");
+                if(current.ond){
+                    System.out.print("O");
+                }else{
+                    System.out.print(" ");
+                }
                 if(current.visited == true)
                 {
-                    System.out.print(" ::-> " + current.value + "V");
+                    System.out.print(current.value + "V");
                 }
                 else
                 {
-                    System.out.print(" ::-> " + current.value + " ");
+                    System.out.print(current.value + " ");
                 }
+                current.visited = false;
+                current.ond = false;
                 toBeSkipped =   current.index;
             }
             System.out.println();
@@ -303,6 +347,8 @@ public class MainList {
             }
             else break;
         }
+        System.out.println();
+        System.out.println();
     }
 
     // Print out the List

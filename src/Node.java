@@ -6,7 +6,7 @@ public class Node {
     public Node up = null;
     public Node down = null;
     // not using skip as of now
-    public int skip = 1;
+    public boolean ond = false;
     public int index = -1;
     public Node(int value){
         this.value = value;
