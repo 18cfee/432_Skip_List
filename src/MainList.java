@@ -197,20 +197,22 @@ public class MainList {
         // todo fix Node current = HEAD.get(0);
         Node current = HEAD;
         for (int i = 1; i <= maxHeight; i++) {
-            Node fullCircle = current.prev;
-            Node largest = current;
-            while (current.value >= otgt) {      //Move untill we find a value in the list smaller than otgt
-                if (current.value > largest.value) {
-                    largest = current;
+            if(current.next != null) {
+                Node fullCircle = current.prev;
+                Node largest = current;
+                while (current.value >= otgt) {      //Move untill we find a value in the list smaller than otgt
+                    if (current.value > largest.value) {
+                        largest = current;
+                    }
+                    if (current == fullCircle) {     //If we have gone full circle an no value was less than otgt.
+                        current = largest;
+                        break;
+                    }
+                    current = current.next;
                 }
-                if (current == fullCircle) {     //If we have gone full circle an no value was less than otgt.
-                    current = largest;
-                    break;
+                while (current.value + current.skip < otgt) {      //Move untill current.next is bigger than otgt.
+                    current = current.next;
                 }
-                current = current.next;
-            }
-            while (current.value + current.skip < otgt) {      //Move untill current.next is bigger than otgt.
-                current = current.next;
             }
             ond[i - 1] = current;
             if (current.down != null) {
@@ -219,7 +221,16 @@ public class MainList {
                 //TODO fix current = HEAD.get(i - 1);
             }
         }
+        print(ond);
         return ond;
+    }
+
+    public static void print(Node[] ond){
+        System.out.print("Ond: ");
+        for (int i = 0; i < ond.length; i++) {
+            System.out.print(ond[i].value + ", ");
+        }
+        System.out.println();
     }
 
     // Choose the new value based on the absolute positioning
@@ -238,6 +249,7 @@ public class MainList {
                 current = current.down;
             }
         }
+        System.out.println("OTGT value: " + current.value);
         return current.value;
     }
 
