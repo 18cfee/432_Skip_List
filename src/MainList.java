@@ -3,6 +3,7 @@
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
+import java.util.Scanner;
 
 public class MainList {
 
@@ -10,42 +11,11 @@ public class MainList {
     private static Node HEAD;
     private static int totalNumberNodes = 1;
     public static int maxHeight = 1;
-asda
     public static void main(String args[]) {
         // initialize as a circle to itself
         Node originalHEAD = new Node(4);
         originalHEAD.index = 1;
         HEAD = originalHEAD;
-
-        printListWithIndex();
-        /*insert(new Node(7), 1);
-        insert(new Node(6), 4);
-        insert(new Node(43110));
-        printList();
-        insert(new Node(-230), 1);
-        insert(new Node(-23423), 2);
-        insert(new Node(9), 1);
-        insert(new Node(70), 3);
-        insert(new Node(34), 1);*/
-        printListWithIndex();
-        /*for (int i = 0; i < 1; i++) {
-            int num = chooseNewOTGT();
-            System.out.println("OGTG: " + num);
-            for (Node n : chooseOrigin(num)) {
-                System.out.println("nValue: " + n.value);
-            }
-        }*/
-        /*(insert(new Node(-2343), 2);
-        printList();
-        insert(new Node(94), 3);
-        printList();
-        insert(new Node(73), 2);
-        printList();
-        insert(new Node(3434), 1);
-        insert(new Node(-233), 2);
-        insert(new Node(92), 1);
-        insert(new Node(702), 2);
-        insert(new Node(342), 1);*/
         insert(new Node(341));
         insert(new Node(342));
         insert(new Node(343));
@@ -58,118 +28,22 @@ asda
         insert(new Node(3410));
         insert(new Node(3411));
         printListWithIndex();
-        printList();
+        //printList();
+        Scanner in = new Scanner(System.in);
+        int input = 0;
+        int otgtVal = 0;
+        Node[] ond = null;
+        do{
+            otgtVal = chooseNewOTGT();
+            ond = chooseOrigin(otgtVal);
+            System.out.println("Enter the number you want to search for or -1 to exit: ");
+            input = in.nextInt();
+            if(input != -1){
+                searchNode(input,ond);
+            }
+        } while(input != -1);
 
     }
-
-    // h is hardcoded in this one
-    /*public static boolean insert(Node node, int h) {
-        int insertVal = node.value;
-        Node current = HEAD.get(HEAD.size() - 1);
-        // bounds checking, since next is checked from here on
-        if (insertVal == current.value) {
-            return true;
-        }
-        // When starting from a HEAD on it's own list
-        while (current.next == null) {
-            if (current.down != null) {
-                current = current.down;
-            } else {
-                current.next = node;
-                current.prev = node;
-                node.next = current;
-                node.prev = current;
-                totalNumberNodes++;
-                return false;
-            }
-        }
-        while (true) {
-            int onVal = current.value;
-            Node nextN = current.next;
-            int nextVal = nextN.value;
-            if (nextVal == insertVal) {
-                return true;
-            }
-            // right interval (include circular logic)
-            if ((onVal < insertVal && insertVal < nextVal) || (onVal > nextVal && (insertVal > onVal || insertVal < nextVal))) {
-                if (current.down == null) {
-                    current.next = node;
-                    node.prev = current;
-                    node.next = nextN;
-                    nextN.prev = node;
-                    // Insert extra levels after original insert
-                    for (int i = 2; i <= h; i++) {
-                        node.up = new Node(insertVal);
-                        node.up.down = node;
-                        if (HEAD.size() < i) {
-                            HEAD.add(i - 1, node.up);
-                        }
-                        // New list
-                        if (i > maxHeight) {
-                            maxHeight = i;
-                            node = node.up;
-                        } else { // this moves out both directions to find nearest node on next level up to splice into
-                            Node ccw = node.next;
-                            Node cw = node.prev;
-                            while (cw.up == null) {
-                                cw = cw.prev;
-                            }
-                            while (ccw.up == null) {
-                                ccw = ccw.next;
-                            }
-                            // Move up to do splicing
-                            ccw = ccw.up;
-                            cw = cw.up;
-                            node = node.up;
-                            node.prev = cw;
-                            node.next = ccw;
-                            ccw.prev = node;
-                            cw.next = node;
-                        }
-                    }
-                    totalNumberNodes++;
-                    return false;
-                } else {
-                    current = current.down;
-                }
-            } else {
-                current = nextN;
-            }
-        }
-    }*/
-
-    // Print out the List
-
-    //Todo Erik or Robbie edit this
-    /*public static void printList() {
-        System.out.println("Start New Print:");
-        // print all levels
-        for (int i = 0; i < HEAD.size(); i++) {
-            Node current = HEAD.get(i);
-            System.out.print(current.value);
-            int levelStartVal = current.value;
-            while (current.next != null && current.next.value != levelStartVal) {
-                current = current.next;
-                System.out.print(" ::-> " + current.value);
-            }
-            System.out.println();
-        }
-    }*/
-
-    /*public static void printListWithIndex() {
-        System.out.println("Start New Print:");
-        // print all levels
-        for (int i = 0; i < HEAD.size(); i++) {
-            Node current = HEAD.get(i);
-            System.out.print(current.value + ":" + current.index);
-            int levelStartVal = current.value;
-            while (current.next != null && current.next.value != levelStartVal) {
-                current = current.next;
-                System.out.print(" ::-> " + current.value + ":" + current.index);
-            }
-            System.out.println();
-        }
-    }*/
 
     // h will be chosen automatically in this one
     public static boolean insert(Node node) {
@@ -277,9 +151,9 @@ asda
         return false;
     }
 
-    public static boolean searchNode(int value) {
+    public static boolean searchNode(int value, Node[] ond) {
         //TODO Erik
-        Node cur = HEAD.get(otgt);
+        Node cur = HEAD;
         
         while(cur.value != value && !cur.visited){
             cur.visited = true;
@@ -297,7 +171,7 @@ asda
                 cur = cur.next;
             }
     
-            if(cur.value == value{
+            if(cur.value == value){
                 return true;
             }
         return false;
@@ -321,6 +195,7 @@ asda
     public static Node[] chooseOrigin(int otgt) {
         Node[] ond = new Node[maxHeight];
         // todo fix Node current = HEAD.get(0);
+        Node current = HEAD;
         for (int i = 1; i <= maxHeight; i++) {
             Node fullCircle = current.prev;
             Node largest = current;
@@ -356,7 +231,7 @@ asda
         //This far depects how many absolute pos have been traversed
         int indexFromHead = 0;
         while (indexFromHead != otgt) {      //Move untill we find otgt
-            if (indexFromHead + current.index < otgt) { // Does not overshoot
+            if (indexFromHead + current.index <= otgt) { // Does not overshoot
                 indexFromHead+=current.index; // add number of nodes skipped by moving to next
                 current = current.next;
             } else {
