@@ -13,7 +13,7 @@ public class MainList {
     public static int maxHeight = 1;
     public static void main(String args[]) {
         // initialize as a circle to itself
-        Node originalHEAD = new Node(4);
+        Node originalHEAD = new Node(100);
         originalHEAD.index = 1;
         HEAD = originalHEAD;
         insert(new Node(341));
@@ -25,10 +25,10 @@ public class MainList {
         insert(new Node(347));
         insert(new Node(348));
         insert(new Node(349));
-        insert(new Node(3410));
-        insert(new Node(3411));
+        insert(new Node(369));
+        insert(new Node(380));
         printListWithIndex();
-        //printList();
+        printList();
         Scanner in = new Scanner(System.in);
         int input = 0;
         int otgtVal = 0;
@@ -258,15 +258,29 @@ public class MainList {
         System.out.println("Start New Print:");
         Node current = HEAD;
         Node levelStart = HEAD;
+        int toBeSkipped;
         // print all levels
         while(true){
-
+            toBeSkipped =   current.index;
             System.out.print(current.value);
             int levelStartVal = current.value;
             // print one level
             while(current.next != null &&  current.next.value != levelStartVal){
+                while(toBeSkipped  > 1)
+                {
+                    System.out.print("          ");
+                    toBeSkipped--;
+                }
                 current = current.next;
-                System.out.print(" ::-> " + current.value);
+                if(current.visited == true)
+                {
+                    System.out.print(" ::-> " + current.value + "V");
+                }
+                else
+                {
+                    System.out.print(" ::-> " + current.value + " ");
+                }
+                toBeSkipped =   current.index;
             }
             System.out.println();
             if(levelStart.down != null) {
